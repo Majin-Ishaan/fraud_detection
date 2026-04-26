@@ -1,0 +1,7 @@
+{
+  "transaction_amount": "float",
+  "transaction_hour": "int",
+  "customer_age": "float",
+  "is_international": "int",
+  "past_failed_transactions": "int"
+}
