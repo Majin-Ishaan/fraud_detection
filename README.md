@@ -22,6 +22,7 @@ fraud_detection/
 └── README.md
 
 ## Setup
+```bash
 # Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
@@ -37,6 +38,49 @@ python app/model/train.py
 
 # Run the API
 uvicorn app.main:app --reload
+```
+
+## Run with Docker
+
+Docker packages the API, Python dependencies, and saved model artifact into one image so the app can run the same way on another machine or deployment platform.
+
+Build the image from the project root:
+
+```bash
+docker build -f infra/Dockerfile -t fraud-detection-api .
+```
+
+Run the container locally:
+
+```bash
+docker run -p 8000:8000 fraud-detection-api
+```
+
+The API will be available at:
+
+```text
+http://localhost:8000/docs
+```
+
+## Push to GitHub Container Registry
+
+Tag the local image with the GitHub Container Registry name:
+
+```bash
+docker tag fraud-detection-api ghcr.io/majin-ishaan/fraud-detection-api:latest
+```
+
+Push the image:
+
+```bash
+docker push ghcr.io/majin-ishaan/fraud-detection-api:latest
+```
+
+To test the pushed image later:
+
+```bash
+docker run -p 8000:8000 ghcr.io/majin-ishaan/fraud-detection-api:latest
+```
 
 ## API Reference
 
