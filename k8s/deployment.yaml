@@ -1,0 +1,49 @@
+apiVersion: apps/v1          # the API group that handles Deployments
+kind: Deployment             # we want a Deployment, not a bare Pod
+metadata:
+  name: fraud-detection      # name you'll use in kubectl commands
+  labels:
+    app: fraud-detection     # label used by the Service to find these pods
+
+spec:
+  replicas: 2                # run 2 copies — one dies, traffic still works
+  selector:
+    matchLabels:
+      app: fraud-detection   # Deployment manages pods with THIS label
+
+  template:                  # blueprint for each pod
+    metadata:
+      labels:
+        app: fraud-detection # must match selector.matchLabels above
+    spec:
+      containers:
+        - name: fraud-api
+          image: yourdockerhubuser/fraud-detection:latest
+          ports:
+            - containerPort: 8000   # your FastAPI app listens here
+
+          envFrom:
+            - configMapRef:
+                name: fraud-config  # pulls all keys from ConfigMap as env vars
+
+          resources:
+            requests:
+              cpu: "100m"           # minimum CPU guaranteed (100 millicores)
+              memory: "128Mi"       # minimum RAM guaranteed
+            limits:
+              cpu: "500m"           # hard cap — HPA uses this to calculate %
+              memory: "256Mi"
+
+          livenessProbe:            # Kubernetes restarts pod if this fails
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+
+          readinessProbe:           # pod only gets traffic when this passes
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10

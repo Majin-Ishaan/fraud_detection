@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fraud-config         # must match configMapRef.name in deployment.yaml
+
+data:
+  MODEL_PATH: "/app/model/fraud_model.pkl"
+  THRESHOLD: "0.3"           # your recall-optimised threshold
+  LOG_LEVEL: "INFO"
+  APP_ENV: "staging"
