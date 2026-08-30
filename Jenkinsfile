@@ -16,16 +16,20 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
-                // run your pytest tests as a gate
-                // if tests fail, pipeline stops here — nothing gets deployed
-                sh '''
-                    pip install -r requirements.txt
-                    pip install pytest httpx
-                    pytest tests/ -v
-                '''
-            }
+    agent {
+        docker {
+            image 'python:3.11-slim'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
+    }
+    steps {
+        sh '''
+            pip install -r requirements.txt
+            pip install pytest httpx
+            pytest tests/ -v
+        '''
+    }
+}
 
         stage('Build Docker Image') {
             steps {
