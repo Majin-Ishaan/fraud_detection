@@ -114,3 +114,17 @@ Response:
 ## Interactive Docs
 Swagger UI: http://localhost:8000/docs
 ReDoc:       http://localhost:8000/redoc
+
+## Kubernetes
+
+### Prerequisites
+- Minikube
+- kubectl
+
+### Deploy
+minikube start --driver=docker
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/hpa.yaml
+minikube service fraud-detection-service --url

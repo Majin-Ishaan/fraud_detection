@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: fraud-api
-          image: yourdockerhubuser/fraud-detection:latest
+          image: ishaangupta23/fraud-detection:latest
           ports:
             - containerPort: 8000   # your FastAPI app listens here
 
