@@ -54,19 +54,18 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                // applies your k8s manifests — same commands you ran manually
-                sh '''
-                    kubectl apply -f k8s/configmap.yaml
-                    kubectl apply -f k8s/deployment.yaml
-                    kubectl apply -f k8s/service.yaml
-                    kubectl apply -f k8s/hpa.yaml
-                    kubectl rollout status deployment/fraud-detection
-                '''
-            }
-        }
+       stage('Deploy to Kubernetes') {
+    steps {
+        sh '''
+            export KUBECONFIG=/var/jenkins_home/.kube/config
+            kubectl apply -f k8s/configmap.yaml --validate=false
+            kubectl apply -f k8s/deployment.yaml --validate=false
+            kubectl apply -f k8s/service.yaml --validate=false
+            kubectl apply -f k8s/hpa.yaml --validate=false
+            kubectl rollout status deployment/fraud-detection
+        '''
     }
+}
 
     post {
         success {
