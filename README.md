@@ -128,3 +128,9 @@ kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/hpa.yaml
 minikube service fraud-detection-service --url
+
+## CI/CD — Jenkins Pipeline
+Every push to main triggers:
+1. pytest test suite
+2. Docker image build and push to Docker Hub
+3. Kubernetes deployment rollout
