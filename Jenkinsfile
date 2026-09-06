@@ -15,11 +15,11 @@ pipeline {
             }
         }
 
-        stage('Test') {
+    stage('Test') {
     agent {
         docker {
             image 'python:3.11-slim'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
+            args '-v /var/run/docker.sock:/var/run/docker.sock --user root'
         }
     }
     steps {
